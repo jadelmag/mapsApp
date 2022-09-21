@@ -1,0 +1,8 @@
+img {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 75px;
+    height: 75px;
+    z-index: 999;
+}

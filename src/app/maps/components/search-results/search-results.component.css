@@ -1,0 +1,21 @@
+.pointer {
+    cursor: pointer;
+}
+
+.unselect-text {
+    user-select: none;
+}
+
+/* .scroll {
+    overflow-y: scroll;
+    max-height: 400px;
+} */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+p {
+    font-size: 12px;
+    
+}
