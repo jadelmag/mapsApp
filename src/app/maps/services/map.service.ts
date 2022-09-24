@@ -7,7 +7,7 @@ import {
   Marker,
   Popup,
 } from 'mapbox-gl';
-import { DirectionsApiClient } from 'src/app/maps/api';
+import { DirectionsApiClient } from 'src/app/maps/service-angular';
 import { Feature } from 'src/app/maps/interfaces/places.interfaces';
 import {
   DirectionResponse,

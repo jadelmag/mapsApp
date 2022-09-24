@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthResponse, User } from 'src/app/auth/interfaces/auth.interfaces';
+import { TokenService } from 'src/app/auth/services/token.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
@@ -16,7 +17,7 @@ export class AuthService {
     return { ...this._user };
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
   login(email: string, password: string) {
     const url = `${this.baseUrl}/auth/login`;
@@ -25,7 +26,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(url, body).pipe(
       tap((resp) => {
         if (resp.ok) {
-          localStorage.setItem('token', resp.token!);
+          this.tokenService.token = resp.token!;
         }
       }),
       map((valid) => valid.ok),
@@ -40,7 +41,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(url, body).pipe(
       tap((resp) => {
         if (resp.ok) {
-          localStorage.setItem('token', resp.token!);
+          this.tokenService.token = resp.token!;
         }
       }),
       map((valid) => valid.ok),
@@ -50,14 +51,10 @@ export class AuthService {
 
   verifyToken(): Observable<boolean> {
     const url = `${this.baseUrl}/auth/renew`;
-    const headers = new HttpHeaders().set(
-      'x-token',
-      localStorage.getItem('token') || ''
-    );
-
-    return this.http.get<AuthResponse>(url, { headers }).pipe(
+    return this.http.get<AuthResponse>(url).pipe(
       map((resp) => {
-        localStorage.setItem('token', resp.token!);
+        this.tokenService.token = resp.token!;
+
         this._user = {
           name: resp.name!,
           uid: resp.uid!,
